@@ -1,6 +1,11 @@
-# FastAPI Clean Architecture CRUD
+# Graph RAG
 
-Simple FastAPI app with:
+Technoloy stack:
+- python
+- fastAPI framework
+- langchain
+- LiteLLM
+- Neo4j graph DB
 - PostgreSQL
 - SQLAlchemy
 - Repository + Service pattern
