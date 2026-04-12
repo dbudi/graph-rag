@@ -1,0 +1,28 @@
+@startuml Knowledge Graph Builder Workflow
+
+skin rose
+skinparam Style strictuml
+title Knowledge Graph Builder Workflow
+
+actor User
+participant "API" as API
+participant "Document extraction" as DocumentExtraction
+participant "chunking" as Chunking
+participant "Embedding" as Embedding
+participant "KG extraction" as KGExtraction
+participant "Graph Builder" as GraphBuilder
+participant "Neo4j" as Neo4j
+
+User -> API: Upload document
+API -> DocumentExtraction: Extract text from document
+DocumentExtraction -> Chunking: Split text into chunks
+Chunking -> KGExtraction: Extract entities and relationships
+loop for each chunk
+    Embedding -> GraphBuilder: Generate embeddings for chunk
+    KGExtraction -> GraphBuilder: Build graph with extracted entities and relationships
+    GraphBuilder -> Neo4j: Store graph in Neo4j database
+end
+GraphBuilder --> API: Return graph document
+API --> User: graph document response
+
+@enduml
