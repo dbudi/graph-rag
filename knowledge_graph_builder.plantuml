@@ -17,6 +17,7 @@ User -> API: Upload document
 API -> DocumentExtraction: Extract text from document
 DocumentExtraction -> Chunking: Split text into chunks
 Chunking -> KGExtraction: Extract entities and relationships
+Chunking -> Embedding: Generate embeddings for chunks
 loop for each chunk
     Embedding -> GraphBuilder: Generate embeddings for chunk
     KGExtraction -> GraphBuilder: Build graph with extracted entities and relationships

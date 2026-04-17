@@ -18,7 +18,7 @@ Technoloy stack:
 ## Setup
 
 ### 1. Install dependencies
-pip install fastapi uvicorn sqlalchemy psycopg2-binary python-dotenv
+pip install -r requirements.txt
 
 ### 2. Create .env
 DATABASE_URL=postgresql://user:password@localhost:5432/mydb

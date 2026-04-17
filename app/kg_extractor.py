@@ -3,6 +3,7 @@ from langchain_core.prompts import PromptTemplate
 from langchain_core.language_models import BaseChatModel
 from langchain_core.output_parsers import JsonOutputParser
 from pydantic import BaseModel, Field
+from pydantic import ValidationError
 from langchain_openai import ChatOpenAI
 import logging
 import time
@@ -104,6 +105,29 @@ _chat_prompt = ChatPromptTemplate.from_messages([
     HumanMessagePromptTemplate(prompt=_human_prompt),
 ])
 
+# Null-like string values to reject
+_NULL_LIKE = {"", "none", "null", "n/a", "unknown", "na"}
+
+def _is_valid_triple(item: dict) -> bool:
+    """Validate a single triple dict using the ExtractedInfo Pydantic model."""
+    try:
+        parsed = ExtractedInfo(**item)
+        # Extra check: reject None or null-like string values
+        for field, val in parsed.model_dump().items():
+            if val is None:
+                logger.warning("Triple field '%s' is None: %s", field, item)
+                return False
+            if str(val).strip().lower() in _NULL_LIKE:
+                logger.warning("Triple field '%s' has null-like value '%s': %s", field, val, item)
+                return False
+        return True
+    except ValidationError as e:
+        logger.warning("Triple failed Pydantic validation: %s | item=%s", e, item)
+        return False
+    except Exception as e:
+        logger.warning("Unexpected validation error: %s | item=%s", e, item)
+        return False
+
 # ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
@@ -142,10 +166,18 @@ def extract_knowledge_graph(
         elapsed = time.perf_counter() - start
         logger.info("Extracted triples in %.2fs  (text_len=%d)", elapsed, len(text))
 
+        raw: list[dict] = []
         if isinstance(response, list):
-            results.extend(response)
+            raw.extend(response)
         elif isinstance(response, dict):
-            results.append(response)
+            raw.append(response)
+
+        # Validate each triple before passing downstream
+        for item in raw:
+            if _is_valid_triple(item):
+                results.append(item)
+            
+        logger.info("Valid triples: %d / %d", len(results), len(raw))
 
     except Exception as exc:
         logger.error("KG extraction failed (text_len=%d): %s | text[:100]=%s",

@@ -18,3 +18,4 @@ wikipedia>=1.4.0
 python-dotenv>=1.2.2
 SQLAlchemy>=2.0.49
 psycopg2-binary>=2.9.6
+sentence-transformers>=5.4.1

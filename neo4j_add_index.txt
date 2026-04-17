@@ -1,0 +1,21 @@
+# Vector Index (WAJIB untuk GraphRAG)
+CREATE VECTOR INDEX vector
+FOR (c:Chunk)
+ON (c.embedding)
+OPTIONS {
+  indexConfig: {
+    `vector.dimensions`: 1536,
+    `vector.similarity_function`: 'cosine'
+  }
+};
+
+# untuk model nomic-embed-text, dimensionnya 768
+CREATE VECTOR INDEX vector
+FOR (c:Chunk)
+ON (c.embedding)
+OPTIONS {
+  indexConfig: {
+    `vector.dimensions`: 768,
+    `vector.similarity_function`: 'cosine'
+  }
+};
