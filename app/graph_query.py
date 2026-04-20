@@ -5,6 +5,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 def graph_query(entities: list[dict]) -> list[dict]:
+    """Query the graph database for the given entities and their relationships."""
     logger.info(f"Performing graph query for entities: {entities}")
     if not entities:
         logger.warning("No entities provided for graph query.")

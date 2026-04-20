@@ -1,4 +1,6 @@
 def merge_results(semantic_results, graph_results):
+    """Merge results from semantic search and graph query, 
+    giving priority to semantic search but including graph results for additional context."""
     merged = []
 
     # From semantic search

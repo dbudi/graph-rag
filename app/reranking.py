@@ -10,6 +10,7 @@ llm = get_llm()
 reranker = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
 
 def rerank(query, contexts):
+    """Rerank the contexts based on their relevance to the query using a cross-encoder model."""
     pairs = [(query, c["text"]) for c in contexts]
     scores = reranker.predict(pairs)
 
@@ -19,6 +20,7 @@ def rerank(query, contexts):
     return sorted(contexts, key=lambda x: x["rerank_score"], reverse=True)
 
 def rerank_with_llm(query, contexts):
+    """Rerank the contexts based on their relevance to the query using an LLM."""
     prompt = f"""
     Query: {query}
 

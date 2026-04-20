@@ -2,6 +2,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from config import get_llm
 
 def _build_context(contexts: list[dict], max_chars: int = 4000) -> str:
+    """Build a context string from the list of contexts, ensuring it does not exceed max_chars."""
     parts = []
     total = 0
 
@@ -29,6 +30,7 @@ _qa_prompt = ChatPromptTemplate.from_messages([
 ])
 
 def generate_answer(query: str, contexts: list[dict]) -> str:
+    """Generate an answer to the query based on the provided contexts."""
     context_text = _build_context(contexts)
     llm = get_llm()
 

@@ -37,6 +37,7 @@ def semantic_search_with_score(
     k: int = 5,
     project_id: str = "demo_project_123"
 ) -> list[dict]:
+    """Perform a semantic search and return results with their similarity scores."""
 
     vectorstore = get_neo4j_vector()
 

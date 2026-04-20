@@ -27,6 +27,7 @@ _entity_extraction_prompt = ChatPromptTemplate.from_messages([
 ])
 
 def extract_entities(query: str) -> list[dict]:
+    """Use an LLM to extract named entities from the query."""
     chain = _entity_extraction_prompt | llm
     result = chain.invoke({"query": query})
     raw = result.content
